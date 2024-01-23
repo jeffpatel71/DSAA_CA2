@@ -4,36 +4,34 @@ class Controller():
     def __init__(self, view, models, utilities):
         self.__view = view
         self.__models = models
-        
-        self.__utilities = utilities    
-        self.__menu = self.__utilities.get_menu()
-        self.__menustack = self.__models.Stack()
-        self.__menustack.push(self.__menu)
-
-        self.__choices = {
-            "1": self.selection1,
-            "2": self.selection2,
-            "3": self.selection3,
-            "4": self.selection4,
-            "5": self.selection5,
-            "6": self.selection6,
-            "7": self.selection7,
-            "8": self.goodbye,
-        } ### Hashtable for the menu options
-        # wait how tf do i do this again
-
-
-
+        self.__utilities = utilities
+        self.__options = hashtable()    
         print(self.__menustack[0]) #print the inital menu
 
-    def selections():
-        return 2
-        
     def run(self):
-        while True:
-            selection = self.__view.display_menu() # Change this
+        # Dynamically display the menu and adjust the menu options
+        _, length = self.__view.display_menu()
+        hashtable_menu = hashtable() 
+        for i in range(length):
+            hashtable_menu[str(i)] = getattr(self, f'selection{i}')
 
-            self.__choices[selection]() # hashtable
-            if selection == "8": #this kinda remains the same
+        while True:
+            self.__view.display_menu()
+            selection = self.__utilities.check_input("^[0-9]+$", "Enter your selection: ", "Invalid input, please enter a valid selection")
+            hashtable_menu[selection] # hashtable
+            if selection == str(length-1): 
                 break
+        
+        # Alternate Method ; Ask Irfan for this part
+        # menustack = self.__models.Stack()
+        # menustack.push(self.__view.display_menu())
+        # while True:
+        #     if menustack.isEmpty():
+        #         break
+    
+    def selection1(self):
+        
+        expression = self.__utilities.get_expression("Please type text you want to encrypt: \n")
+
+
         return

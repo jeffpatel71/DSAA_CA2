@@ -1,6 +1,7 @@
 from Classes.Models.Stack import Stack
 from Classes.Utilities.IO import IO
 from Classes.Utilities.Class_Errors import Class_Errors
+
 class View():
     def __init__(self, stack_class, io_class, class_errors):
         self.__stack = stack_class
@@ -12,10 +13,12 @@ class View():
         print(content)
 
     def display_menu(self):
+        
         menu_stack = self.__stack
         for line in self.__io.open_non_empty_file("text_files/menu.txt"):
             menu_stack.push(line)
         print(menu_stack)
+        return len(menu_stack)
 
     
         ## i need to make it as easy for the controller to push and pop from the stack 
