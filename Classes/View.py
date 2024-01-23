@@ -7,7 +7,7 @@ class View():
         self.__io = io_class
         self.__errors = class_errors
 
-    def display_credits(self, file_name):
+    def display_credits(self, file_name= "text_files/credits.txt"):
         content = self.__io.open_non_empty_file(file_name)
         print(content)
 
