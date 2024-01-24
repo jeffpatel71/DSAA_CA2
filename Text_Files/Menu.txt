@@ -1,0 +1,8 @@
+Please select your choice ('1', '2', '3', '4', '5', '6'):
+    1. Add/Modify assignment statement
+    2. Display current assignment statements
+    3. Evaluate a single variable
+    4. Read assignment statements from file
+    5. Sort assignment statement
+    6. Exit
+Enter choice:
