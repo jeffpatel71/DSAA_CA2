@@ -1,7 +1,7 @@
 import re
 import os
 
-class InputOutputHandler:
+class IO:
     def __init__(self):
         pass 
 
