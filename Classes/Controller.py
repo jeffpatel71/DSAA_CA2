@@ -1,18 +1,19 @@
-from Classes.Models.Hash import HashTable 
-from Classes.Utilities.IO import IO
+# frm Classes.Models 
+import Classes.Utilities 
 from Classes.Menu import Menu
 from Classes.View import View
-
-
 import Classes.Models as Model
+import Classes.Utilities as Util
 
+a = Util.IO.text_input()
+print(type(a))
 
 class Controller():
     def __init__(self):
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__model = Model # Model Object (Import all models in the folder)
-        self.__io = IO()
-        self.__storehashtable= Model.HashTable()
+        self.__io = Util.IO.text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
+        self.__storehashtable= Model.Hash
         self.enter_message = input("\n Press enter key, to continue...")
 
 

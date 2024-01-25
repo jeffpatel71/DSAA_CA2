@@ -8,8 +8,7 @@ from Classes.View import View
 # Main Function
 if __name__ == "__main__":
     print()
-    Controller().run(folder_path="TextFiles", 
+    controller = Controller()
+    controller.run(folder_path="TextFiles", 
                     credits_file="title.txt",
                     menufile= "options.txt")
-
-

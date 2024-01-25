@@ -1,6 +1,6 @@
 from Classes.Models.Stack import Stack
-from Classes.Utilities.IO import IO
-from Classes.Utilities.Class_Errors import errors
+from Classes.Utilities.files import File_Manager as IO
+from Classes.Utilities.Class_Errors import Class_Errors
 
 class Menu():
     ## Constructor Function
