@@ -1,5 +1,4 @@
 # frm Classes.Models 
-import Classes.Utilities 
 from Classes.Menu import Menu
 from Classes.View import View
 import Classes.Models as Model
@@ -13,9 +12,8 @@ class Controller():
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__model = Model # Model Object (Import all models in the folder)
         self.__io = Util.IO.text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
-        self.__storehashtable= Model.Hash
+        self.__storehashtable= Model.Hash.HashTable()
         self.enter_message = input("\n Press enter key, to continue...")
-
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
@@ -46,19 +44,24 @@ class Controller():
             
     def selection1(self):
         # Add/Modify Assignment Statements
-        expression = self.__io.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n")
+        # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
+        key, expression = self.__io.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
         
+        self.__storehashtable[key] = (expression, evaluate(expression))
+        
+        # Sort the hashtable by key binary sort
         return
     
     def selection2(self):
         # Display Assignment Statements
         print(f"Current Assignments:\n{'*' * 20}")
-        self.__view.display_assignments()
+        
+        self.__view.display_assignments(self.__storehashtable)
         
         return 
     
     def selection3(self):
-        # Evaluate Assignment Statements
+        # Evaluate Assignment Statements #Expression Tree
         self.__io.get_expression("Please enter the variable you want to evaluate: \n")
         print("\n")
 
@@ -73,7 +76,7 @@ class Controller():
         return
     
     def selection5(self):
-        # Sort Assignment Statements
+        # Sort Assignment Statements & Store Seperate File
         self.__storehashtable  = self.__sort.bubble_sort(self.__storehashtable)
         self.__view.display_assignments()
         return
