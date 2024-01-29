@@ -1,18 +1,30 @@
-# frm Classes.Models 
+
+# Import Statements
 from Classes.Menu import Menu
 from Classes.View import View
-import Classes.Models as Model
-import Classes.Utilities as Util
 
-a = Util.IO.text_input()
-print(type(a))
+# Models
+from Classes.Models.Binary import Binary
+from Classes.Models.Hash import HashTable
+from Classes.Models.Stack import Stack
+
+# Utilities
+from Classes.Utilities.IO import text_input
+from Classes.Utilities.Class_Errors import Class_Errors
+from Classes.Utilities.files import File_Manager
+
+
+# Alternative for importing all at once 
+"""
+import classes.models as Model
+import classes.utilities as Utilities
+"""
 
 class Controller():
     def __init__(self):
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
-        self.__model = Model # Model Object (Import all models in the folder)
-        self.__io = Util.IO.text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
-        self.__storehashtable= Model.Hash.HashTable()
+        self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
+        self.__storehashtable= HashTable()
         self.enter_message = input("\n Press enter key, to continue...")
 
     # Run Function
@@ -47,6 +59,8 @@ class Controller():
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__io.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
         
+
+
         self.__storehashtable[key] = (expression, evaluate(expression))
         
         # Sort the hashtable by key binary sort
