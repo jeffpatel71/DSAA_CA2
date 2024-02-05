@@ -18,6 +18,16 @@ class HashTable:
         self.keys = self.keys + [None] * self.size
         self.buckets = self.buckets + [None] * self.size
 
+    def items(self):
+        for key, value in zip(self.keys, self.buckets):
+            if key is not None:
+                yield key, value
+
+    def getkeys(self):
+        for key in self.keys:
+            if key is not None:
+                yield key
+
     def __setitem__(self, key, value):
         if self.count / self.size > 0.6:  # resize if load factor > 0.6
             self.resize()

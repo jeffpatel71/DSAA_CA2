@@ -11,8 +11,11 @@ from Classes.Models.Stack import Stack
 from Classes.Utilities.IO import text_input
 from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
+from Classes.Utilities.sort import Sort
 
 from Classes.evaluator import Evaluator 
+
+import re
 # Alternative for importing all at once 
 
 """
@@ -25,6 +28,7 @@ class Controller():
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
         self.__storehashtable= HashTable()
+        self.__sort = Sort()
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
@@ -59,19 +63,26 @@ class Controller():
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
+        # Search if the expression contains another variable(s)
+        
+        # a = (1+2), expression is (1+2), 
+
+        
+        
+        try:
+            self.__storehashtable[key]
+        
 
         expression = Evaluator(expression)
-        self.__storehashtable[key] = (expression, expression.evaluate())
         
-        # Sort the hashtable by key binary sort
-        self.__storehashtable = self.__sort.bubble_sort(self.__storehashtable)
-        return print('hi')
+        self.__storehashtable[key] = (expression, expression.evaluate())
+        return 
     
     def selection2(self):
         # Display Assignment Statements
         print(f"Current Assignments:\n{'*' * 20}")
-        self.__view.display_assignments(self.__storehashtable)
-        
+        sorted_keys = self.__sort.bubbleSort(list(self.__storehashtable.keys()))
+        self.__view.display_assignments(self.__storehashtable, sorted_keys)
         return 
     
     def selection3(self):
