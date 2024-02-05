@@ -12,10 +12,12 @@ from Classes.Utilities.IO import text_input
 from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
 from Classes.Utilities.sort import Sort
+from Classes.Utilities.search import Search
 
 from Classes.evaluator import Evaluator 
 
 import re
+import copy
 # Alternative for importing all at once 
 
 """
@@ -29,6 +31,8 @@ class Controller():
         self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
         self.__storehashtable= HashTable()
         self.__sort = Sort()
+        self.__search = Search()
+        self.__sortedKeys = self.__sort.bubbleSort(list(self.__storehashtable.getkeys()))
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
@@ -64,25 +68,31 @@ class Controller():
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
         # Search if the expression contains another variable(s)
-        
+        dup_expression = copy.copy(expression)
         # a = (1+2), expression is (1+2), 
-
-        
-        
-        try:
-            self.__storehashtable[key]
-        
+        existing_keys = re.findall(r'\b[^\d\W]+\b', expression)
+        for key in existing_keys:
+            try:
+                # if key exists
+                new_expression = self.__storehashtable[key] # expression + eval
+                expression = expression.replace(key, str(new_expression[1]))
+            except:
+                expression = expression.replace(key, ' ')
 
         expression = Evaluator(expression)
+        dup_expression = Evaluator(dup_expression)
         
-        self.__storehashtable[key] = (expression, expression.evaluate())
+        self.__storehashtable[key] = [dup_expression, expression.evaluate()]
+        
+        if self.__storehashtable[key][1] == '?':
+            self.__storehashtable[key][1] = None
+        print(self.__storehashtable[key])
         return 
     
     def selection2(self):
         # Display Assignment Statements
         print(f"Current Assignments:\n{'*' * 20}")
-        sorted_keys = self.__sort.bubbleSort(list(self.__storehashtable.keys()))
-        self.__view.display_assignments(self.__storehashtable, sorted_keys)
+        self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return 
     
     def selection3(self):

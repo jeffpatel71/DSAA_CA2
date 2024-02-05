@@ -33,7 +33,10 @@ class Evaluator:
             # RULE 3: If token is number, set key of the current node
             # to that number and return to parent
             elif t not in ['+', '-', '', '/', '*', ')']:
-                currentTree.setKey(float(t))
+                try :
+                    currentTree.setKey(float(t))
+                except: 
+                    currentTree.setKey(t)
                 parent = stack.pop()
                 currentTree = parent
             # RULE 4: If token is ')' go to parent of current node
@@ -50,6 +53,9 @@ class Evaluator:
         leftTree = parse_tree.getLeftTree()
         rightTree = parse_tree.getRightTree()
         op = parse_tree.getKey()
+
+        if op == ' ':  # Check if the key is a string
+            return None
 
         if leftTree and rightTree:
             if op == '+':

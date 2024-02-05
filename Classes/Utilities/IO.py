@@ -20,18 +20,18 @@ class text_input:
     def get_expression(self, prompt):
         while True:
             # Check for Valid Symbols
-            full_expression = self.check_input(
-                "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$", prompt, "Invalid input, please enter a valid assignment statement"
+            full_expression = self.check_input( # "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$"
+                "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$", prompt, "Invalid input, please enter a valid assignment statement1"
             )
             
             # Check for two or more "="
             if full_expression.count("=") >= 2:
-                print("Invalid input, please enter a valid assignment statement")
+                print("Invalid input, please enter a valid assignment statement2")
                 continue
 
             # Check for "=" at the start or end
             if full_expression[0] == "=" or full_expression[-1] == "=":
-                print("Invalid input, please enter a valid assignment statement")
+                print("Invalid input, please enter a valid assignment statement3")
                 continue
 
             # Check for opertors at the end or two operators in a row
@@ -39,7 +39,7 @@ class text_input:
 
             for i in range(len(full_expression) - 1):
                 if full_expression[i] in operators and full_expression[i + 1] in operators:
-                    print("Invalid input, please enter a valid assignment statement")
+                    print("Invalid input, please enter a valid assignment statement4")
                     continue
 
             key, expression = full_expression.split("=")
