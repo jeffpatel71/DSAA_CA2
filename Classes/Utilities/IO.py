@@ -25,8 +25,6 @@ class text_input:
             )
             if variable in keys:
                 return variable
-            else:
-                print("Invalid input, please enter a valid variable")
 
     def get_expression(self, prompt):
         while True:

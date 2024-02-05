@@ -70,7 +70,9 @@ class Controller():
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
+        
         self.__storehashtable[key] = buildParseTree(expression, key)
+        
         self.__sortedKeys.add(key)
         print(self.__storehashtable[key].fast_eval)
         return 
@@ -83,16 +85,26 @@ class Controller():
     
     def selection3(self):
         # Evaluate Assignment Statements #Expression Tree
-        var = self.__input().get_variable("Please enter the variable you want to evaluate: \n", sortedKeys = self.__sortedKeys)
+        var = self.__input.get_variable("Please enter the variable you want to evaluate: \n", keys = self.__sortedKeys)
         print("\n")
         self.__view.display_evaluation(self.__storehashtable[var])
         return
     
     def selection4(self):
         # Read Assigment Statements from File
-        self.__io.get_file_path("Please enter the input file: \n")
-        self.__storehashtable = self.__file.read_file(self.__storehashtable)
-        self.__view.display_assignments()
+        file_name = self.__input.get_file_path("Please enter the input file: \n")
+        file = File_Manager(folder_name="./", file_name=file_name)
+        content = File_Manager.open_non_empty_file("Please enter the input file: \n")
+
+        # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
+        for line in content.split("\n"):
+            # This is no checks done
+            key, expression = line.split("=")
+            self.__storehashtable[key] = buildParseTree(expression, key)
+            
+
+        # self.__storehashtable = self.__file.read_file(self.__storehashtable)
+        # self.__view.display_assignments()
         return
     
     def selection5(self):

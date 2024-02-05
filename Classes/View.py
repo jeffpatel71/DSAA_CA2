@@ -6,6 +6,11 @@ class View():
         print('Assignments:')
         for key in sorted_keys:
             if hashtable[key].fast_eval is not None:
-                print(f'{key}={str(hashtable[key].expression)}=>{hashtable[key].fast_eval}')
+                expression_string = str(hashtable[key].expression)
+                expression_string = expression_string.replace(' ', '')
+                print(f'{key}={expression_string}=>{hashtable[key].fast_eval}')
 
-    
+    def display_evaluation(self, tree):
+        print("Expression Tree:")
+        print(tree.root.printInorder(0))
+        print(f'Value for variable: {tree.fast_eval}')

@@ -39,15 +39,24 @@ class BinaryTree:
             self.rightTree.printPreorder(level+1)
 
     def printInorder(self, level):
-        if self.leftTree != None:
-            self.leftTree.printInorder(level+1)
-        print(str(level*'-') + str(self.key))
-        if self.rightTree != None:
-            self.rightTree.printInorder(level+1)
+        result = ""
+        if self.leftTree is not None:
+            result += self.leftTree.printInorder(level+1)
+        result += str(level*'.') + str(self.key) + "\n"
+        if self.rightTree is not None:
+            result += self.rightTree.printInorder(level+1)
+        return result
+
+    # def printInorder(self, level):
+    #     if self.leftTree != None:
+    #         self.leftTree.printInorder(level+1)
+    #     print(str(level*'.') + str(self.key))
+    #     if self.rightTree != None:
+    #         self.rightTree.printInorder(level+1)
 
     def printPostorder(self, level):
         if self.leftTree != None:
             self.leftTree.printPostorder(level+1)
         if self.rightTree != None:
             self.rightTree.printPostorder(level+1)
-        print(str(level*'-') + str(self.key))
+        print(str(level*'.') + str(self.key))
