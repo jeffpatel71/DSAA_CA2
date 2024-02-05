@@ -16,7 +16,18 @@ class text_input:
 
     def enter_message(self):
         return input("Press any key to continue...")
-    
+
+
+    def get_variable(self, prompt, keys):
+        while True:
+            variable = self.check_input(
+                "^[a-zA-Z][a-zA-Z0-9]*$", prompt, "Invalid input, please enter a valid variable"
+            )
+            if variable in keys:
+                return variable
+            else:
+                print("Invalid input, please enter a valid variable")
+
     def get_expression(self, prompt):
         while True:
             # Check for Valid Symbols

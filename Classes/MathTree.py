@@ -23,6 +23,7 @@ class MathTree:
     def update(self, newTree):
         self.root = newTree.root
         self._fast_eval = self.root.evaluate()
+        self.expression = newTree.expression
         self.resolveDependants()
 
     @property

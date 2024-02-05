@@ -35,7 +35,7 @@ class Controller():
         self.__storehashtable= global_hash_table
         self.__sort = Sort()
         self.__search = Search()
-        self.__sortedKeys = []
+        self.__sortedKeys = set()
         # self.__sortedKeys = self.__sort.bubbleSort(list(self.__storehashtable.getkeys()))
 
     # Run Function
@@ -71,7 +71,7 @@ class Controller():
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
         self.__storehashtable[key] = buildParseTree(expression, key)
-        self.__sortedKeys.append(key)
+        self.__sortedKeys.add(key)
         print(self.__storehashtable[key].fast_eval)
         return 
     
@@ -83,9 +83,8 @@ class Controller():
     
     def selection3(self):
         # Evaluate Assignment Statements #Expression Tree
-        var = self.__io.get_expression("Please enter the variable you want to evaluate: \n")
+        var = self.__input().get_variable("Please enter the variable you want to evaluate: \n", sortedKeys = self.__sortedKeys)
         print("\n")
-
         self.__view.display_evaluation(self.__storehashtable[var])
         return
     

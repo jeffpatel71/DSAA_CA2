@@ -3,6 +3,7 @@ from Classes.MathTree import MathTree, MathTreeNode
 from Classes.Models.Stack import Stack
 from Classes.binaryHash import BinaryHashTable 
 def buildParseTree(exp, parent_tree_id=None):
+    print(exp)
     # For each operator and parenthesis in the expression, add spaces around it
     for i in ['(', '+', '-', '*', '/', ')']:
         exp = re.sub(rf"[{i}]", f' {i} ', exp)
