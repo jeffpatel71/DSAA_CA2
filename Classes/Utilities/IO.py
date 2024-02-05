@@ -17,7 +17,6 @@ class text_input:
     def enter_message(self):
         return input("Press any key to continue...")
     
-
     def get_expression(self, prompt):
         while True:
             # Check for Valid Symbols
@@ -43,11 +42,7 @@ class text_input:
                     print("Invalid input, please enter a valid assignment statement")
                     continue
 
-            
-
             key, expression = full_expression.split("=")
-
-            
 
             return key, expression
     

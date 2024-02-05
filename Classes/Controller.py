@@ -13,7 +13,6 @@ from Classes.Utilities.IO import text_input
 from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
 
-
 # Alternative for importing all at once 
 """
 import classes.models as Model
@@ -58,40 +57,40 @@ class Controller():
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__io.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
-        
 
-
+        expression = buildParseTree(expression)
         self.__storehashtable[key] = (expression, evaluate(expression))
         
         # Sort the hashtable by key binary sort
+        self.__storehashtable = self.__sort.bubble_sort(self.__storehashtable)
         return
     
     def selection2(self):
         # Display Assignment Statements
         print(f"Current Assignments:\n{'*' * 20}")
-        
         self.__view.display_assignments(self.__storehashtable)
         
         return 
     
     def selection3(self):
         # Evaluate Assignment Statements #Expression Tree
-        self.__io.get_expression("Please enter the variable you want to evaluate: \n")
+        var = self.__io.get_expression("Please enter the variable you want to evaluate: \n")
         print("\n")
 
-        self.__view.display_evaluation()
+        self.__view.display_evaluation(self.__storehashtable[var])
         return
     
     def selection4(self):
         # Read Assigment Statements from File
         self.__io.get_file_path("Please enter the input file: \n")
-
+        self.__storehashtable = self.__file.read_file(self.__storehashtable)
         self.__view.display_assignments()
         return
     
     def selection5(self):
         # Sort Assignment Statements & Store Seperate File
-        self.__storehashtable  = self.__sort.bubble_sort(self.__storehashtable)
+        # Sort by Value 
+        self.__storehashtable  = self.__sort.bubble_sort_value(self.__storehashtable)
         self.__view.display_assignments()
         return
     
