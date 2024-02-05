@@ -1,5 +1,5 @@
 class BinaryTree:
-    def _init_(self, key, leftTree=None, rightTree=None):
+    def __init__(self, key, leftTree=None, rightTree=None):
         self.key = key
         self.leftTree = leftTree
         self.rightTree = rightTree

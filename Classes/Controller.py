@@ -4,7 +4,6 @@ from Classes.Menu import Menu
 from Classes.View import View
 
 # Models
-from Classes.Models.Binary import Binary
 from Classes.Models.Hash import HashTable
 from Classes.Models.Stack import Stack
 
@@ -13,7 +12,9 @@ from Classes.Utilities.IO import text_input
 from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
 
+from Classes.evaluator import Evaluator 
 # Alternative for importing all at once 
+
 """
 import classes.models as Model
 import classes.utilities as Utilities
@@ -24,7 +25,6 @@ class Controller():
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
         self.__storehashtable= HashTable()
-        self.enter_message = input("\n Press enter key, to continue...")
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
@@ -34,36 +34,38 @@ class Controller():
 
         # Display Credits
         menu.display_credits()
-
-        # Dynamically display the menu and adjust the menu options
-        length = menu.getlength() 
         
         # Create a Hastable to store the menu options
-        hashtable_menu = self.__model.HashTable()
+        hashtable_menu = HashTable()
+        length = menu.load_menu()
         for i in range(length):
+            if i == 0 or i == length-1:
+                continue
             hashtable_menu[str(i)] = getattr(self, f'selection{i}')
-
+        
+        
         # Display Menu and get user selection till user quits
         while True:
             menu.display_menu()
-            regex = f"^[0-{length-1}]$"
-            selection = self.io.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
+            regex = f"^[1-{length-1}]$"
+            selection = self.__input.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
             if selection == str(length-1):
                 break
-            hashtable_menu[selection]
-            self.enter_message() 
+            hashtable_menu[selection]() 
+            input("Press any key to continue...")
             
     def selection1(self):
+
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
-        key, expression = self.__io.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
+        key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
 
-        expression = buildParseTree(expression)
-        self.__storehashtable[key] = (expression, evaluate(expression))
+        expression = Evaluator(expression)
+        self.__storehashtable[key] = (expression, expression.evaluate())
         
         # Sort the hashtable by key binary sort
         self.__storehashtable = self.__sort.bubble_sort(self.__storehashtable)
-        return
+        return print('hi')
     
     def selection2(self):
         # Display Assignment Statements
@@ -90,6 +92,7 @@ class Controller():
     def selection5(self):
         # Sort Assignment Statements & Store Seperate File
         # Sort by Value 
+
         self.__storehashtable  = self.__sort.bubble_sort_value(self.__storehashtable)
         self.__view.display_assignments()
         return

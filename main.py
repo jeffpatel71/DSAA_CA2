@@ -9,6 +9,6 @@ from Classes.View import View
 if __name__ == "__main__":
     print()
     controller = Controller()
-    controller.run(folder_path="TextFiles", 
-                    credits_file="title.txt",
-                    menufile= "options.txt")
+    controller.run(folder_path="Text_Files", 
+                    credits_file="Credits.txt",
+                    menufile= "Menu.txt")

@@ -1,7 +1,6 @@
 import re
-from Models.Stack import Stack
-from Models.Binary import BinaryTree
-
+from Classes.Models.Stack import Stack
+from Classes.Models.Binary import BinaryTree
 class Evaluator:
     def __init__(self, expression):
         self.__expression = expression
@@ -44,11 +43,15 @@ class Evaluator:
                 raise ValueError
         return tree
     
-    def evaluate(self):
-        leftTree = self.__parse_tree.getLeftTree()
-        rightTree = self.__parse_tree.getRightTree()
-        op = self.__parse_tree.getKey()
-        if leftTree != None and rightTree != None:
+    def evaluate(self, parse_tree=None):
+        if parse_tree is None:
+            parse_tree = self.__parse_tree
+
+        leftTree = parse_tree.getLeftTree()
+        rightTree = parse_tree.getRightTree()
+        op = parse_tree.getKey()
+
+        if leftTree and rightTree:
             if op == '+':
                 return self.evaluate(leftTree) + self.evaluate(rightTree)
             elif op == '-':
@@ -60,4 +63,4 @@ class Evaluator:
             elif op == '**':
                 return self.evaluate(leftTree) ** self.evaluate(rightTree)
         else:
-            return self.__parse_tree.getKey()
+            return parse_tree.getKey()

@@ -23,7 +23,7 @@ class text_input:
             full_expression = self.check_input(
                 "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$", prompt, "Invalid input, please enter a valid assignment statement"
             )
-
+            
             # Check for two or more "="
             if full_expression.count("=") >= 2:
                 print("Invalid input, please enter a valid assignment statement")

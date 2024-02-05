@@ -1,22 +1,24 @@
 import os
+import re
 class File_Manager:
     def __init__(self, folder_name = os.getcwd, file_name = None):
         self.__folder_name = folder_name    
         self.__file_name = file_name
+        self.file_path = os.path.join(self.__folder_name, self.__file_name)
 
-    def open_non_empty_file(self, file_path, prompt):
+    def open_non_empty_file(self, prompt):
         while True:
-            file_contents = self.openfile(file_path, prompt)
+            file_contents = self.openfile(self.file_path, prompt)
             if file_contents != "":
                 return file_contents
             else:
                 print(f"The file '{file_path}' is empty.")
                 file_path = self.get_file_path(prompt)
 
-    def writefile(self, file_path, content_to_write):
+    def writefile(self, content_to_write):
         while True:
             try:
-                with open(file_path, "w") as file:
+                with open(self.file_path, "w") as file:
                     file.write(content_to_write)
                     break
             except Exception as e:
@@ -73,3 +75,10 @@ class File_Manager:
                     continue
                 files_folder.append(file_name)
         return files_folder
+    
+    def check_input(self, options, msg, invalid_msg):
+        inp = input(msg)
+        while not re.match(options, inp):
+            print(invalid_msg)
+            inp = input(msg)
+        return inp

@@ -1,34 +1,41 @@
 class HashTable:
-    def __init__(self, size):
+    def __init__(self, size=10):
         self.size = size
+        self.count = 0
         self.keys = [None] * self.size
         self.buckets = [None] * self.size
-        # A simple remainder method to convert key to index
 
     def hashFunction(self, key):
-        return key % self.size
+        # Use a built-in hash function to handle non-integer keys
+        hash_value = hash(key)
+        return hash_value % self.size
 
-    # Deal with collision resolution by means of
-    # linear probing with a 'plus 1' rehash
     def rehashFunction(self, oldHash):
         return (oldHash + 1) % self.size
 
+    def resize(self):
+        self.size *= 2
+        self.keys = self.keys + [None] * self.size
+        self.buckets = self.buckets + [None] * self.size
+
     def __setitem__(self, key, value):
+        if self.count / self.size > 0.6:  # resize if load factor > 0.6
+            self.resize()
+
         index = self.hashFunction(key)
         startIndex = index
         while True:
-            # If bucket is empty then just use it
-            if self.buckets[index] == None:
+            if self.keys[index] is None:
                 self.buckets[index] = value
                 self.keys[index] = key
+                self.count += 1
                 break
-            else:  # If not empty and the same key then just overwrite
+            else:
                 if self.keys[index] == key:
                     self.buckets[index] = value
                     break
-                else:  # Look for another available bucket
+                else:
                     index = self.rehashFunction(index)
-                    # We must stop if no more buckets
                     if index == startIndex:
                         break
 
@@ -36,12 +43,9 @@ class HashTable:
         index = self.hashFunction(key)
         startIndex = index
         while True:
-            if self.keys[index] == key:  # Will be mostly the case unless value
-                # had been previously rehashed at insertion
-                # time
+            if self.keys[index] == key:
                 return self.buckets[index]
-            else:  # Value for the key is somewhere else
-                # (due to imperfect hash function)
+            else:
                 index = self.rehashFunction(index)
                 if index == startIndex:
                     return None

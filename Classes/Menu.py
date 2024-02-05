@@ -1,5 +1,5 @@
 from Classes.Models.Stack import Stack
-from Classes.Utilities.files import File_Manager as IO
+from Classes.Utilities.files import File_Manager 
 from Classes.Utilities.Class_Errors import Class_Errors
 
 class Menu():
@@ -8,23 +8,29 @@ class Menu():
         self.__folder_path = folder_path
         self.__creditfile = creditfile
         self.__menuFile = menuFile
+        self.__menu_stack = Stack()
 
     ## Display Credits
     def display_credits(self):
-        content = IO.open_non_empty_file(f"{self.__folder_path}/{self.__creditfile}", prompt = f"Please enter a real file name:")
-        # Raise Error if file is empty/invalid don't ask for re-prompt
+        file = File_Manager(file_name=self.__creditfile, folder_name=self.__folder_path)
+        content = file.open_non_empty_file(prompt = f"Please enter a real file name:")        
         print(content)
     
     ## Display Selection Menu
-    def display_menu(self):
-        menu_stack = Stack()
-        raw_menu = IO.open_non_empty_file(f"{self.__folder_path}/{self.__menuFile}", prompt = f"Please enter a real file name:")
+    def load_menu(self):
+        self.__menu_stack = Stack()
+        raw_menu = File_Manager(file_name=self.__menuFile, folder_name=self.__folder_path)
+        raw_menu = raw_menu.open_non_empty_file(prompt = f"Please enter a real file name:")
         raw_menu = raw_menu.split("\n")
         for line in raw_menu:
-            menu_stack.push(line)
-        print(menu_stack)
-        return len(menu_stack)
-        
+            self.__menu_stack.push(line)
+        return self.__menu_stack.size()
+    
+    def display_menu(self):
+        print(self.__menu_stack)
+    
+    
+
         
 
         
