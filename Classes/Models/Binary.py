@@ -16,18 +16,19 @@ class BinaryTree:
     def getRightTree(self):
         return self.rightTree
 
-    def insertLeft(self, key):
+    def insertLeft(self, key, parent_tree_id=None):
         if self.leftTree == None:
-            self.leftTree = BinaryTree(key)
+            self.leftTree = self.__class__(key, parent_tree_id=parent_tree_id)
         else:
-            t = BinaryTree(key)
+            t = self.__class__(key, parent_tree_id=parent_tree_id)
             self.leftTree, t.leftTree = t, self.leftTree
 
-    def insertRight(self, key):
+    # Insert a new node as the right child of this node
+    def insertRight(self, key, parent_tree_id=None):
         if self.rightTree == None:
-            self.rightTree = BinaryTree(key)
+            self.rightTree = self.__class__(key, parent_tree_id=parent_tree_id)
         else:
-            t = BinaryTree(key)
+            t = self.__class__(key, parent_tree_id=parent_tree_id)
             self.rightTree, t.rightTree = t, self.rightTree
 
     def printPreorder(self, level):
