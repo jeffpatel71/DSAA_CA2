@@ -4,18 +4,14 @@ from Classes.Menu import Menu
 from Classes.View import View
 # Models
 from Classes.Models.Hash import HashTable
-from Classes.Models.Stack import Stack
 
 # Utilities
 from Classes.Utilities.IO import text_input
-from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
 
 from Classes.buildParseTree import buildParseTree
 from Classes.MathTree import global_hash_table
-from Classes.Models.binaryHash import BinaryHashTable
-from Classes.Models.historyStack import historyStack
-
+import random2 
 import re
 import copy
 import math
@@ -25,13 +21,11 @@ class Controller():
     def __init__(self):
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
-        self.__storehashtable = global_hash_table
-        self.__historyStackTable = BinaryHashTable()
-        self.__sortedKeys = set()
+        self.__storehashtable = global_hash_table # Import the global hashtable from MathTree (Can't be instantiated outside of MathTree)
+        self.__sortedKeys = set() # Set to store the sorted keys, handles duplicates
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
-
         # Instantiate Menu Object that contains the credits and menu options
         menu = Menu(folder_path, credits_file, menufile)
 
@@ -59,28 +53,31 @@ class Controller():
     def selection1(self):
         # Add/Modify Assignment Statements
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
+        
+        # Add to the hashtable
         self.__storehashtable[key] = buildParseTree(expression, key)
         return 
     
     def selection2(self):
         # Display Assignment Statements
-        print(f"Current Assignments:\n{'*' * 20}")
         self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return 
     
     def selection3(self):
         # Evaluate Assignment Statements #Expression Tree
         var = self.__input.get_variable("Please enter the variable you want to evaluate: \n", keys = self.__sortedKeys)
-        
         self.__view.display_evaluation(self.__storehashtable[var])
         return
     
     def selection4(self):
         # Read Assigment Statements from File
         file_name = self.__input.get_file_path("Please enter the input file: \n")
+
+        # Instantiate File_Manager
         file = File_Manager(folder_name="./", file_name=file_name)
         content = file.open_non_empty_file("Please enter the input file: \n")
 
+        # Read content for each line
         for line in content.split("\n"):
             key, expression = self.__input.get_expression(input=False,expression_string=line)
             self.__storehashtable[key] = buildParseTree(expression, key)
@@ -128,9 +125,32 @@ class Controller():
         return
     
     def selection6(self):
+        # Purpose is to create a random variable to help the user understand the expression tree
+
+        # Random Variable Creation
+        var = self.__input.get_variable("Please enter the variable name you want to create: \n")
+        get_length = self.__input.get_number("Please enter the length of the expression: \n")
+
+        # Generate the random expression
+        expression = random2.generate_random_expression(get_length)
+
+        # Display the expression and store it in the hashtable
+        print(f"Variable {var} has been created with the expression {expression}")
+        self.__storehashtable[var] = buildParseTree(expression, var)
+        self.__sortedKeys.add(var)     
         return
         
     def selection7(self):
+        # Turtle Graphics, visualize the expression tree
+        var = self.__input.get_variable("Please enter the variable you want to visualize: \n", keys = self.__sortedKeys)
+        menu = Menu(menuFile="expression_tree")
+        menu.load_menu()
+        menu.display_menu()
+        di = self.__input.check_input("^[1-3]$", "Enter your selection: ", "Invalid input, please enter a valid selection")
+        if di =="4":
+            # Exit out of the sub-menu
+            return
+        self.__view.display_evaluation_turtle(self.__storehashtable[var], di)
         return
         
 

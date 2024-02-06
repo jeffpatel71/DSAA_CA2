@@ -6,6 +6,7 @@ class View():
         return
     
     def display_assignments(self, hashtable, sorted_keys):
+        print(f"Current Assignments:\n{'*' * 20}")
         print('Assignments:')
         sorted_keys = Sort().quick_sort(set_of_items=sorted_keys)
         for key in sorted_keys:
