@@ -10,24 +10,16 @@ from Classes.Models.Stack import Stack
 from Classes.Utilities.IO import text_input
 from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
-from Classes.Utilities.sort import Sort
-from Classes.Utilities.search import Search
 
-from Classes.evaluator import Evaluator
 from Classes.buildParseTree import buildParseTree
 from Classes.MathTree import global_hash_table
-from Classes.binaryHash import BinaryHashTable
-from Classes.historyStack import historyStack
+from Classes.Models.binaryHash import BinaryHashTable
+from Classes.Models.historyStack import historyStack
 
 import re
 import copy
 import math
 # Alternative for importing all at once 
-
-"""
-import classes.models as Model
-import classes.utilities as Utilities
-"""
 
 class Controller():
     def __init__(self):
@@ -69,9 +61,7 @@ class Controller():
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
-        
         self.__storehashtable[key] = buildParseTree(expression, key)
-
         evaluated_expression = self.__storehashtable[key].fast_eval
 
         if key not in self.__sortedKeys:
@@ -79,7 +69,7 @@ class Controller():
             self.__sortedKeys.add(key)
         else:
             pass
-        # self.__dependencyTable[]
+
         self.__historyStackTable[key].push((expression, evaluated_expression))
 
         print(evaluated_expression)
@@ -117,9 +107,7 @@ class Controller():
                 pass
 
             self.__storehashtable[key] = buildParseTree(expression, key)
-        
             self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
-
             self.__sortedKeys.add(key)
 
         # self.__storehashtable = self.__file.read_file(self.__storehashtable)
@@ -169,8 +157,9 @@ class Controller():
     def selection6(self):
         # View assignment history
         inp = self.__input.yes_no()
-
+        print(inp)
         if inp == 'y':
+            print('hi')
             if len(self.__sortedKeys) == 0:
                 print('There are currently no assignments. Please add an assignment statement first.')
                 return

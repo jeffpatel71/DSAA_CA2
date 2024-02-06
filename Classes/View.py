@@ -1,12 +1,13 @@
 import turtle as turtle
 import math
-
+from Classes.Models.sort import Sort
 class View():
     def __init__(self):
         return
     
     def display_assignments(self, hashtable, sorted_keys):
         print('Assignments:')
+        sorted_keys = Sort().quick_sort(set_of_items=sorted_keys)
         for key in sorted_keys:
             expression_string = str(hashtable[key].expression)
             expression_string = expression_string.replace(' ', '')
@@ -27,10 +28,6 @@ class View():
         for index in range(content_length):
             content = contents.pop()
             print(f'{index+1} => Expression: {content[0]}, Evaluation: {content[1]}')
-
-    # def visualize_dependency_graph(self, table):
-            
-
 
     def draw_arrow(self, start_pos, end_pos, t):
         t.penup()

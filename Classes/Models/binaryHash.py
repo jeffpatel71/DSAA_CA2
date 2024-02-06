@@ -1,5 +1,3 @@
-# from Classes.MathTree import MathTree
-
 class BinaryHashTable(dict):
     def __setitem__(self, key, value):
         if key in self:

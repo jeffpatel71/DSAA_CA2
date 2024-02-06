@@ -1,6 +1,4 @@
 from Classes.Models.Stack import Stack
-from Classes.binaryHash import BinaryHashTable
-
 class historyStack(Stack):
     def __init__(self):
         super().__init__()
@@ -18,5 +16,3 @@ class historyStack(Stack):
                 output += f'{str(item)}'
         output += ']'
         return output
-
-    

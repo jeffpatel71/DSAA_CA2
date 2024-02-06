@@ -1,10 +1,9 @@
 from Classes.Models.Binary import BinaryTree
-from Classes.binaryHash import BinaryHashTable
+from Classes.Models.binaryHash import BinaryHashTable
 
-
-OPERATORS=['+', '-', '*', '/', '**']
 # Create a global HashTable instance
 global_hash_table = BinaryHashTable()
+OPERATORS=['+', '-', '*', '/', '**']
 
 class MathTree:
     def __init__(self, root=None, expression=None):
@@ -25,7 +24,6 @@ class MathTree:
         self._fast_eval = self.root.evaluate()
         self.expression = newTree.expression
         self.resolveDependants()
-
 
     @property
     def fast_eval(self):

@@ -21,10 +21,9 @@ class text_input:
         inp = input(f'{msg} Type Y for yes and N for no: ')
         while True:
             if str(inp).lower() in ['y', 'n']:
-                return inp
+                return str(inp).lower()
             else:
                 inp = input("Invalid input. Please enter Y for yes and N for no: ")
-
 
     def get_variable(self, prompt, keys):
         while True:
@@ -96,4 +95,3 @@ class text_input:
             return file_path
         print()
         return file_path
-
