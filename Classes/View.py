@@ -1,6 +1,7 @@
 import turtle as turtle
 import math
-from Classes.Models.sort import Sort
+from Classes.Utilities.sort import Sort
+
 class View():
     def __init__(self):
         return
@@ -12,6 +13,8 @@ class View():
             expression_string = str(hashtable[key].expression)
             expression_string = expression_string.replace(' ', '')
             print(f'{key}={expression_string}=>{hashtable[key].fast_eval}')
+
+        print('')
 
     def display_evaluation(self, tree):
         print("Expression Tree:")
@@ -77,5 +80,15 @@ class View():
                 t.pendown()
                 t.write(end_module, align="center")
 
-        # Exit on click
         turtle.exitonclick()
+
+    def display_visual_representation(self, dependency_analysis):
+        print('')
+        for variable, dependencies in dependency_analysis.items():
+            if dependencies:
+                print(f"Variable '{variable}' has dependencies in:")
+                for dependent_variable in dependencies:
+                    print(f"\t{variable} -> {dependent_variable}")
+            else:
+                print(f"Variable {variable} has no dependencies")
+            print('')

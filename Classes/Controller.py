@@ -69,10 +69,8 @@ class Controller():
             self.__sortedKeys.add(key)
         else:
             pass
-
         self.__historyStackTable[key].push((expression, evaluated_expression))
 
-        print(evaluated_expression)
         return 
     
     def selection2(self):
@@ -102,16 +100,16 @@ class Controller():
                 continue
             if key not in self.__sortedKeys:
                 self.__historyStackTable[key] = historyStack()
-                # print("New stack with initial value", self.__historyStackTable[key])
             else:
                 pass
 
             self.__storehashtable[key] = buildParseTree(expression, key)
             self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
             self.__sortedKeys.add(key)
-
-        # self.__storehashtable = self.__file.read_file(self.__storehashtable)
-        # self.__view.display_assignments()
+            
+        # Display Assignment Statements
+        print(f"Current Assignments:\n{'*' * 20}")
+        self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return
     
     def selection5(self):
@@ -193,18 +191,24 @@ class Controller():
             return
         
     def selection7(self):
+        # Visualize Dependencies
         dependencies = {} 
         for i in global_hash_table.items():
             dependencies[i[0]] = i[1].dependants
 
-        if bool(dependencies):
-            try:
-                self.__view.visualize_dependencies(dependencies)
-            except:
-                print('Due to turtle\'s Terminator, visualization can only be done once')
-        else:
-            print('There are currently no variables with dependencies')
-        return
+        # if bool(dependencies):
+        #     try:
+        #         self.__view.visualize_dependencies(dependencies)
+        #     except:
+        #         print('Due to turtle\'s Terminator, visualization can only be done once')
+        # else:
+        #     print('There are currently no variables with dependencies')
+
+        dependency_analysis = {key: set() for key in self.__sortedKeys}
+
+        for key in self.__sortedKeys:
+            visited = set()
+            Search().dfs(key, dependencies, visited, dependency_analysis)
         
-
-
+        self.__view.display_visual_representation(dependency_analysis)
+        return
