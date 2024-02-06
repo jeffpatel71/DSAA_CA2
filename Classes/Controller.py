@@ -81,7 +81,6 @@ class Controller():
             pass
         self.__historyStackTable[key].push((expression, evaluated_expression))
 
-        print(evaluated_expression)
         return 
     
     def selection2(self):
@@ -119,6 +118,10 @@ class Controller():
             self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
 
             self.__sortedKeys.add(key)
+            
+        # Display Assignment Statements
+        print(f"Current Assignments:\n{'*' * 20}")
+        self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return
     
     def selection5(self):

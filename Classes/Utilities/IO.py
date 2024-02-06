@@ -33,6 +33,8 @@ class text_input:
             )
             if variable in keys:
                 return variable
+            else:
+                print("\nVariable not found, please enter an existing variable\n")
 
     def get_expression(self, prompt="", input=True, expression_string="None"):
         while True:

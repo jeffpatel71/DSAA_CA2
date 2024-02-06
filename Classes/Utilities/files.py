@@ -20,6 +20,7 @@ class File_Manager:
             try:
                 with open(self.file_path, "w") as file:
                     file.write(content_to_write)
+                    print(f'File written successfully\n')
                     break
             except Exception as e:
                 print(f"An error occurred: {e}")
