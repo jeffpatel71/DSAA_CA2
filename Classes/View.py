@@ -28,10 +28,6 @@ class View():
             content = contents.pop()
             print(f'{index+1} => Expression: {content[0]}, Evaluation: {content[1]}')
 
-    # def visualize_dependency_graph(self, table):
-            
-
-
     def draw_arrow(self, start_pos, end_pos, t):
         t.penup()
         t.goto(start_pos)
@@ -80,5 +76,15 @@ class View():
                 t.pendown()
                 t.write(end_module, align="center")
 
-        # Exit on click
         turtle.exitonclick()
+
+    def display_visual_representation(self, dependency_analysis):
+        print('')
+        for variable, dependencies in dependency_analysis.items():
+            if dependencies:
+                print(f"Variable '{variable}' has dependencies in:")
+                for dependent_variable in dependencies:
+                    print(f"\t{variable} -> {dependent_variable}")
+            else:
+                print(f"Variable {variable} has no dependencies")
+            print('')

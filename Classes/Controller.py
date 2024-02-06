@@ -79,7 +79,6 @@ class Controller():
             self.__sortedKeys.add(key)
         else:
             pass
-        # self.__dependencyTable[]
         self.__historyStackTable[key].push((expression, evaluated_expression))
 
         print(evaluated_expression)
@@ -204,18 +203,24 @@ class Controller():
             return
         
     def selection7(self):
+        # Visualize Dependencies
         dependencies = {} 
         for i in global_hash_table.items():
             dependencies[i[0]] = i[1].dependants
 
-        if bool(dependencies):
-            try:
-                self.__view.visualize_dependencies(dependencies)
-            except:
-                print('Due to turtle\'s Terminator, visualization can only be done once')
-        else:
-            print('There are currently no variables with dependencies')
-        return
+        # if bool(dependencies):
+        #     try:
+        #         self.__view.visualize_dependencies(dependencies)
+        #     except:
+        #         print('Due to turtle\'s Terminator, visualization can only be done once')
+        # else:
+        #     print('There are currently no variables with dependencies')
+
+        dependency_analysis = {key: set() for key in self.__sortedKeys}
+
+        for key in self.__sortedKeys:
+            visited = set()
+            Search().dfs(key, dependencies, visited, dependency_analysis)
         
-
-
+        self.__view.display_visual_representation(dependency_analysis)
+        return
