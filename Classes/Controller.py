@@ -15,6 +15,7 @@ from Classes.buildParseTree import buildParseTree
 from Classes.MathTree import global_hash_table
 from Classes.Models.binaryHash import BinaryHashTable
 from Classes.Models.historyStack import historyStack
+from Classes.Models.search import Search
 
 import re
 import copy
@@ -64,13 +65,13 @@ class Controller():
         self.__storehashtable[key] = buildParseTree(expression, key)
         evaluated_expression = self.__storehashtable[key].fast_eval
 
+        # Add to history stack
         if key not in self.__sortedKeys:
             self.__historyStackTable[key] = historyStack()
             self.__sortedKeys.add(key)
         else:
             pass
         self.__historyStackTable[key].push((expression, evaluated_expression))
-
         return 
     
     def selection2(self):
@@ -205,7 +206,6 @@ class Controller():
         #     print('There are currently no variables with dependencies')
 
         dependency_analysis = {key: set() for key in self.__sortedKeys}
-
         for key in self.__sortedKeys:
             visited = set()
             Search().dfs(key, dependencies, visited, dependency_analysis)
