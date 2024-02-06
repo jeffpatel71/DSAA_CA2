@@ -2,6 +2,10 @@ class Stack:
     def __init__(self): 
         self.__list= [] 
  
+    @property
+    def list(self):
+        return self.__list
+    
     def isEmpty(self): 
         return self.__list == [] 
      

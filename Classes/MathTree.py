@@ -26,6 +26,7 @@ class MathTree:
         self.expression = newTree.expression
         self.resolveDependants()
 
+
     @property
     def fast_eval(self):
         if not self._fast_eval:

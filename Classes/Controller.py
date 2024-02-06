@@ -2,7 +2,6 @@
 # Import Statements
 from Classes.Menu import Menu
 from Classes.View import View
-import math
 # Models
 from Classes.Models.Hash import HashTable
 from Classes.Models.Stack import Stack
@@ -18,9 +17,11 @@ from Classes.evaluator import Evaluator
 from Classes.buildParseTree import buildParseTree
 from Classes.MathTree import global_hash_table
 from Classes.binaryHash import BinaryHashTable
+from Classes.historyStack import historyStack
 
 import re
 import copy
+import math
 # Alternative for importing all at once 
 
 """
@@ -32,11 +33,9 @@ class Controller():
     def __init__(self):
         self.__view = View() # View Object (Don't want to allow users to create view object outside of Controller)
         self.__input = text_input() # IO Object (Don't want to allow users to create IO object outside of Controller)
-        self.__storehashtable= global_hash_table
-        self.__sort = Sort()
-        self.__search = Search()
+        self.__storehashtable = global_hash_table
+        self.__historyStackTable = BinaryHashTable()
         self.__sortedKeys = set()
-        # self.__sortedKeys = self.__sort.bubbleSort(list(self.__storehashtable.getkeys()))
 
     # Run Function
     def run(self, folder_path, credits_file, menufile):
@@ -63,7 +62,7 @@ class Controller():
             selection = self.__input.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
             if selection == str(length-1):
                 break
-            hashtable_menu[selection]() 
+            hashtable_menu[selection]()
             input("Press any key to continue...")
             
     def selection1(self):
@@ -72,9 +71,18 @@ class Controller():
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
         
         self.__storehashtable[key] = buildParseTree(expression, key)
-        
-        self.__sortedKeys.add(key)
-        print(self.__storehashtable[key].fast_eval)
+
+        evaluated_expression = self.__storehashtable[key].fast_eval
+
+        if key not in self.__sortedKeys:
+            self.__historyStackTable[key] = historyStack()
+            self.__sortedKeys.add(key)
+        else:
+            pass
+        # self.__dependencyTable[]
+        self.__historyStackTable[key].push((expression, evaluated_expression))
+
+        print(evaluated_expression)
         return 
     
     def selection2(self):
@@ -102,8 +110,16 @@ class Controller():
             key, expression = self.__input.get_expression(input=False,expression_string=line)
             if expression == None or key == None:
                 continue
-            # print(key, expression)
+            if key not in self.__sortedKeys:
+                self.__historyStackTable[key] = historyStack()
+                # print("New stack with initial value", self.__historyStackTable[key])
+            else:
+                pass
+
             self.__storehashtable[key] = buildParseTree(expression, key)
+        
+            self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
+
             self.__sortedKeys.add(key)
 
         # self.__storehashtable = self.__file.read_file(self.__storehashtable)
@@ -111,6 +127,7 @@ class Controller():
         return
     
     def selection5(self):
+        # Sort assignment statement
         eval = []
         for i in self.__sortedKeys:
             if self.__storehashtable[i].fast_eval == None:
@@ -147,53 +164,58 @@ class Controller():
         file_name= self.__input.get_file_path("Please enter the output file: \n")
         tofile = File_Manager(folder_name="./", file_name=file_name)
         tofile.writefile(result)
-        
-
-
-        # print(sorted_eval)
-        # values = sorted(set([x[0] for x in sorted_eval]), reverse=True)
-        
-        # write_content = ""
-        # for i in set(values):
-        #     if self.__storehashtable.
-        #     print(i)
-            ### *** Statement With Value ==> i
-
-             
-
-
-            # print(self.__storehashtable[i].fast_eval)
-            # print(i, self.__storehashtable[i].fast_eval)
-        # val_sorted = sorted(self.__storehashtable.items(), key=lambda x:x[1].fast_eval)
-        # print(val_sorted)
-        # Sort Assignment Statements & Store Seperate File
-        # Sort by Value 
-
-        # self.__storehashtable  = self.__sort.bubble_sort_value(self.__storehashtable)
-        # self.__view.display_assignments()
         return
     
-    def update_hash(self):
-        existing_keys = re.findall(r'\b[^\d\W]+\b', expression)
-        for key in existing_keys:
+    def selection6(self):
+        # View assignment history
+        inp = self.__input.yes_no()
+
+        if inp == 'y':
+            if len(self.__sortedKeys) == 0:
+                print('There are currently no assignments. Please add an assignment statement first.')
+                return
+            
+            self.__view.display_variables(self.__sortedKeys)
+
+            var = self.__input.get_variable("Please enter the name for which you would like to view its history: ", self.__sortedKeys)
+            stack_contents = self.__historyStackTable[var]
+            contents = copy.deepcopy(stack_contents)
+            content_length = len(contents.list)
+
+            print(f"\nVariable {var}\'s history (ordered in descending time of creation):\n{'*' * 70}")
+
+            self.__view.display_stack_contents(contents, content_length)
+
+            if content_length > 1:
+                inp_overwrite = self.__input.yes_no("\nWould you like to replace the variable with one of its historical assignments?")
+                if inp_overwrite == 'y':
+                    regex = r"^(?!0)[1-9]\d{0,%s}$" % (content_length - 1)
+                    inp_regex = self.__input.check_input(regex, \
+                                                         "Please enter the index corresponding to the expression you wish to overwrite with: ", \
+                                                                "Invalid index. Please re-enter with the correct format.")
+                    
+                    self.__storehashtable[var] = buildParseTree(stack_contents.subset(content_length - int(inp_regex))[0], var)
+                    print("Overwrite successful")
+                    self.__historyStackTable[var].push(\
+                        (str(self.__storehashtable[var].expression.replace(' ', '')),\
+                        self.__storehashtable[var].fast_eval))
+                    return
+        else:
+            return
+        
+    def selection7(self):
+        dependencies = {} 
+        for i in global_hash_table.items():
+            dependencies[i[0]] = i[1].dependants
+
+        if bool(dependencies):
             try:
-                # if key exists
-                new_expression = self.__storehashtable[key] # expression + eval
-                expression = expression.replace(key, str(new_expression[1]))
+                self.__view.visualize_dependencies(dependencies)
             except:
-                expression = expression.replace(key, ' ')
-    
-    
-            # # Search if the expression contains another variable(s)
-        # dup_expression = copy.copy(expression)
-        # # a = (1+2), expression is (1+2), 
+                print('Due to turtle\'s Terminator, visualization can only be done once')
+        else:
+            print('There are currently no variables with dependencies')
+        return
+        
 
 
-        # expression = Evaluator(expression)
-        # dup_expression = Evaluator(dup_expression)
-        
-        # self.__storehashtable[key] = [dup_expression, expression.evaluate()]
-        
-        # if self.__storehashtable[key][1] == '?':
-        #     self.__storehashtable[key][1] = None
-        # print(self.__storehashtable[key])

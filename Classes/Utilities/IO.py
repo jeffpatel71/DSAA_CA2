@@ -16,6 +16,14 @@ class text_input:
 
     def enter_message(self):
         return input("Press any key to continue...")
+    
+    def yes_no(self, msg = "Would you like to view the history of variable assignments?"):
+        inp = input(f'{msg} Type Y for yes and N for no: ')
+        while True:
+            if str(inp).lower() in ['y', 'n']:
+                return inp
+            else:
+                inp = input("Invalid input. Please enter Y for yes and N for no: ")
 
 
     def get_variable(self, prompt, keys):
@@ -37,7 +45,7 @@ class text_input:
                 reject = re.match("^[a-zA-Z][a-zA-Z0-9\s]*=[a-zA-Z0-9\s\+\-\*\/\.(\)]+$", expression_string)
                 full_expression = expression_string
                 if reject == False:
-                     print(expression_string, "Skipping Line")
+                     print("Invalid string:", expression_string, "skipping Line...\n")
                      return None, None
 
             full_expression = full_expression.replace(" ", "")
