@@ -111,7 +111,6 @@ class Controller():
                 continue
             if key not in self.__sortedKeys:
                 self.__historyStackTable[key] = historyStack()
-                # print("New stack with initial value", self.__historyStackTable[key])
             else:
                 pass
 
@@ -120,9 +119,6 @@ class Controller():
             self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
 
             self.__sortedKeys.add(key)
-
-        # self.__storehashtable = self.__file.read_file(self.__storehashtable)
-        # self.__view.display_assignments()
         return
     
     def selection5(self):

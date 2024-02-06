@@ -45,7 +45,7 @@ class text_input:
                 reject = re.match("^[a-zA-Z][a-zA-Z0-9\s]*=[a-zA-Z0-9\s\+\-\*\/\.(\)]+$", expression_string)
                 full_expression = expression_string
                 if reject == False:
-                     print("Invalid string:", expression_string, "skipping Line...\n")
+                     print("\nInvalid string:", expression_string, "skipping Line...\n")
                      return None, None
 
             full_expression = full_expression.replace(" ", "")
@@ -55,7 +55,7 @@ class text_input:
                 if input == False:
                     print(expression_string, "Skipping Line")
                     return None, None
-                print("Invalid input, please enter a valid assignment statement2")
+                print("Invalid input, please enter a valid assignment statement")
                 continue
 
             # Check for "=" at the start or end
@@ -63,7 +63,7 @@ class text_input:
                 if input == False:
                     print(expression_string, "Skipping Line")
                     return None, None
-                print("Invalid input, please enter a valid assignment statement3")
+                print("Invalid input, please enter a valid assignment statement")
                 continue
 
             # Check for opertors at the end or two operators in a row
@@ -76,7 +76,7 @@ class text_input:
                     if input == False:
                         print(expression_string, "Skipping Line")
                         return None
-                    print("Invalid input, please enter a valid assignment statement4")
+                    print("Invalid input, please enter a valid assignment statement")
                     continue
 
             key, expression = full_expression.split("=")
