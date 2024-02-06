@@ -2,7 +2,7 @@
 # Import Statements
 from Classes.Menu import Menu
 from Classes.View import View
-
+import math
 # Models
 from Classes.Models.Hash import HashTable
 from Classes.Models.Stack import Stack
@@ -94,25 +94,83 @@ class Controller():
         # Read Assigment Statements from File
         file_name = self.__input.get_file_path("Please enter the input file: \n")
         file = File_Manager(folder_name="./", file_name=file_name)
-        content = File_Manager.open_non_empty_file("Please enter the input file: \n")
+        content = file.open_non_empty_file("Please enter the input file: \n")
 
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         for line in content.split("\n"):
             # This is no checks done
-            key, expression = line.split("=")
+            key, expression = self.__input.get_expression(input=False,expression_string=line)
+            if expression == None or key == None:
+                continue
+            # print(key, expression)
             self.__storehashtable[key] = buildParseTree(expression, key)
-            
+            self.__sortedKeys.add(key)
 
         # self.__storehashtable = self.__file.read_file(self.__storehashtable)
         # self.__view.display_assignments()
         return
     
     def selection5(self):
+        eval = []
+        for i in self.__sortedKeys:
+            if self.__storehashtable[i].fast_eval == None:
+                eval.append([-math.inf, i])
+            else:
+                eval.append([self.__storehashtable[i].fast_eval, i])
+
+        sorted_eval = sorted(eval, key=lambda x: x[0], reverse=True)
+
+        # Group items with the same value
+        grouped_eval = {}
+        for value, key in eval:
+            if value not in grouped_eval:
+                grouped_eval[value] = []
+            grouped_eval[value].append(key)
+
+        # Sort the groups in descending order of value
+        sorted_eval = sorted(grouped_eval.items(), key=lambda x: x[0], reverse=True)
+
+        # Convert each group to a string
+        grouped_strings = []
+        for value, keys in sorted_eval:
+            if value == -math.inf:
+                value = 'None'
+            grouped_strings.append(f"Statements with Value ==> {value}")
+            for i in keys:
+                expression_string = str(self.__storehashtable[i].expression)
+                expression_string = expression_string.replace(' ', '')
+                grouped_strings.append(f"{i}={expression_string}")
+            grouped_strings.append("")
+
+        # Join all the strings together
+        result = "\n".join(grouped_strings)
+        file_name= self.__input.get_file_path("Please enter the output file: \n")
+        tofile = File_Manager(folder_name="./", file_name=file_name)
+        tofile.writefile(result)
+        
+
+
+        # print(sorted_eval)
+        # values = sorted(set([x[0] for x in sorted_eval]), reverse=True)
+        
+        # write_content = ""
+        # for i in set(values):
+        #     if self.__storehashtable.
+        #     print(i)
+            ### *** Statement With Value ==> i
+
+             
+
+
+            # print(self.__storehashtable[i].fast_eval)
+            # print(i, self.__storehashtable[i].fast_eval)
+        # val_sorted = sorted(self.__storehashtable.items(), key=lambda x:x[1].fast_eval)
+        # print(val_sorted)
         # Sort Assignment Statements & Store Seperate File
         # Sort by Value 
 
         # self.__storehashtable  = self.__sort.bubble_sort_value(self.__storehashtable)
-        self.__view.display_assignments()
+        # self.__view.display_assignments()
         return
     
     def update_hash(self):

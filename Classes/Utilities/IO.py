@@ -26,20 +26,35 @@ class text_input:
             if variable in keys:
                 return variable
 
-    def get_expression(self, prompt):
+    def get_expression(self, prompt="", input=True, expression_string="None"):
         while True:
             # Check for Valid Symbols
-            full_expression = self.check_input( # "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$"
-                "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$", prompt, "Invalid input, please enter a valid assignment statement1"
-            )
+            if input == True:
+                full_expression = self.check_input( # "^[a-zA-Z][a-zA-Z0-9]*=[a-zA-Z0-9\+\-\*\/\(\)]+$"
+                    "^[a-zA-Z][a-zA-Z0-9\s]*=[a-zA-Z0-9\s\+\-\*\/\.(\)]+$", prompt, "Invalid input, please enter a valid assignment statement1"
+                )
+            elif input == False:
+                reject = re.match("^[a-zA-Z][a-zA-Z0-9\s]*=[a-zA-Z0-9\s\+\-\*\/\.(\)]+$", expression_string)
+                full_expression = expression_string
+                if reject == False:
+                     print(expression_string, "Skipping Line")
+                     return None, None
+
+            full_expression = full_expression.replace(" ", "")
             
             # Check for two or more "="
             if full_expression.count("=") >= 2:
+                if input == False:
+                    print(expression_string, "Skipping Line")
+                    return None, None
                 print("Invalid input, please enter a valid assignment statement2")
                 continue
 
             # Check for "=" at the start or end
             if full_expression[0] == "=" or full_expression[-1] == "=":
+                if input == False:
+                    print(expression_string, "Skipping Line")
+                    return None, None
                 print("Invalid input, please enter a valid assignment statement3")
                 continue
 
@@ -48,6 +63,11 @@ class text_input:
 
             for i in range(len(full_expression) - 1):
                 if full_expression[i] in operators and full_expression[i + 1] in operators:
+                    if full_expression[i] == "*" and full_expression[i + 1] == "*":
+                        continue
+                    if input == False:
+                        print(expression_string, "Skipping Line")
+                        return None
                     print("Invalid input, please enter a valid assignment statement4")
                     continue
 

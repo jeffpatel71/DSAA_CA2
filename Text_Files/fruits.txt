@@ -9,4 +9,3 @@ Pear=(Apple+1)
 Coconut=(1+0)
 Starfruit=(2**4)
 Mango=((Apple+(Durian+(Pear*(Blueberry*(Coconut/Strawberry)))))/2) 
-
