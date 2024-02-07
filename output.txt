@@ -5,10 +5,13 @@ Statements with Value ==> 135.5
 Banana=(2*(65.5+2.25))
 Mango=((Apple+(Durian+(Pear*(Blueberry*(Coconut/Strawberry)))))/2)
 
+Statements with Value ==> 22.0
+a=(2+(4*5))
+
 Statements with Value ==> 16.0
+Starfruit=(2**4)
 Pear=(Apple+1)
 Strawberry=(Pear*1)
-Starfruit=(2**4)
 Blueberry=(Pear+0)
 
 Statements with Value ==> 15.0

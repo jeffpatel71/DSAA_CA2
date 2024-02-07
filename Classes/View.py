@@ -1,7 +1,7 @@
 import turtle as turtle
 import math
 from Classes.Utilities.sort import Sort
-from Classes.PythonTreeViewer import ParseTreeVisualizer
+from Classes.Models.PythonTreeViewer import ParseTreeVisualizer
 from Classes.Utilities.errors import TurtleGraphicsError
 class View():
     def __init__(self):
@@ -13,14 +13,13 @@ class View():
         for key in sorted_keys:
             expression_string = str(hashtable[key].expression)
             expression_string = expression_string.replace(' ', '')
-            print(f'{key}={expression_string}=>{hashtable[key].fast_eval}')
-
+            print(f'{key}={expression_string}=> {hashtable[key].eval}')
         print('')
 
-    def display_evaluation(self, tree):
+    def display_evaluation(self, tree, key):
         print("Expression Tree:")
         print(tree.root.printInorder(0))
-        print(f'Value for variable: {tree.fast_eval}')
+        print(f'Value for variable "{key}": {tree.eval}')
 
     def display_variables(self, keys):
         print('')

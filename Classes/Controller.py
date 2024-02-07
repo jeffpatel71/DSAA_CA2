@@ -6,8 +6,8 @@ from Classes.View import View
 
 # Models/Data Structures
 from Classes.Models.Hash import HashTable
-from Classes.binaryHash import BinaryHashTable
-from Classes.historyStack import historyStack
+from Classes.Models.binaryHash import BinaryHashTable
+from Classes.Models.historyStack import historyStack
 
 
 # Utilities
@@ -17,10 +17,10 @@ from Classes.Utilities.sort import Sort
 from Classes.Utilities.search import Search
 
 # Binary Classes
-from Classes.buildParseTree import buildParseTree
-from Classes.MathTree import global_hash_table
+from Classes.Models.buildParseTree import buildParseTree
+from Classes.Models.MathTree import global_hash_table
 
-from Classes.randomex import random_expressions
+from Classes.Models.randomex import random_expressions
 # Python Libraries
 
 import re
@@ -54,27 +54,26 @@ class Controller():
         
         if length >=10:
             regex = f"^[1-9]|{length-1}$"
-            print(regex)
         else:
             regex = f"^[1-{length-1}]$"
         # Display Menu and get user selection till user quits
         while True:
             menu.display_menu()
-            selection = self.__input.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
+            selection = self.__input.check_input(regex, "Enter choice: ", "Invalid input, please enter a valid selection")
             if selection == str(length-1):
                 break
             hashtable_menu[selection]()
-            input("Press any key to continue...")
+            input("\nPress any key to continue...")
             
     def selection1(self):
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
-        key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
+        key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \nFor example, a=(1+2)\n") # Check for double "="
         if key == None or expression == None:
             return  
         self.__storehashtable[key] = buildParseTree(expression, key)
 
-        evaluated_expression = self.__storehashtable[key].fast_eval
+        evaluated_expression = self.__storehashtable[key].eval
 
         if key not in self.__sortedKeys:
             self.__historyStackTable[key] = historyStack()
@@ -94,7 +93,7 @@ class Controller():
         var = self.__input.get_variable("Please enter the variable you want to evaluate: \n", keys = self.__sortedKeys)
         print("\n")
         if var:
-            self.__view.display_evaluation(self.__storehashtable[var])
+            self.__view.display_evaluation(self.__storehashtable[var], key=var)
         return
     
     def selection4(self):
@@ -108,7 +107,6 @@ class Controller():
             if line == "":
                 continue
             key, expression = self.__input.get_expression(input=False,expression_string=line)
-            print(expression, key)
             if expression == None or key == None:
                 continue
 
@@ -118,7 +116,7 @@ class Controller():
                 pass
 
             self.__storehashtable[key] = buildParseTree(expression, key)
-            self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
+            self.__historyStackTable[key].push((expression, self.__storehashtable[key].eval))
             self.__sortedKeys.add(key)
 
         # Display Assignment Statements
@@ -130,10 +128,10 @@ class Controller():
         # Sort assignment statement
         eval = []
         for i in self.__sortedKeys:
-            if self.__storehashtable[i].fast_eval == None:
+            if self.__storehashtable[i].eval == None:
                 eval.append([-math.inf, i])
             else:
-                eval.append([self.__storehashtable[i].fast_eval, i])
+                eval.append([self.__storehashtable[i].eval, i])
 
         sorted_eval = sorted(eval, key=lambda x: x[0], reverse=True)
         
@@ -197,7 +195,7 @@ class Controller():
                     print("Overwrite successful")
                     self.__historyStackTable[var].push(\
                         (str(self.__storehashtable[var].expression.replace(' ', '')),\
-                        self.__storehashtable[var].fast_eval))
+                        self.__storehashtable[var].eval))
                     return
         else:
             return

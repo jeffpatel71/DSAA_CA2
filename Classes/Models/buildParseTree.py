@@ -1,7 +1,8 @@
 import re
-from Classes.MathTree import MathTree, MathTreeNode
+from Classes.Models.MathTree import MathTree, MathTreeNode
 from Classes.Models.Stack import Stack
-from Classes.binaryHash import BinaryHashTable 
+from Classes.Models.binaryHash import BinaryHashTable 
+
 def buildParseTree(exp, parent_tree_id=None):
     # For each operator and parenthesis in the expression, add spaces around it
     for i in ['(', '+', '-', '*', '/', ')']:

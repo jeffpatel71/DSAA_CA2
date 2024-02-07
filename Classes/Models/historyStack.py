@@ -1,5 +1,5 @@
 from Classes.Models.Stack import Stack
-from Classes.binaryHash import BinaryHashTable
+from Classes.Models.binaryHash import BinaryHashTable
 
 class historyStack(Stack):
     def __init__(self):

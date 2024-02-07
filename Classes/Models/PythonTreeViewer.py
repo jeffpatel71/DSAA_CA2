@@ -1,5 +1,5 @@
 import turtle
-from Classes.buildParseTree import buildParseTree
+from Classes.Models.buildParseTree import buildParseTree
 
 class ParseTreeVisualizer:
     def __init__(self):
