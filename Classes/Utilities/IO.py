@@ -9,6 +9,7 @@ class text_input:
 
     def check_input(self, options, msg, invalid_msg):
         inp = input(msg)
+        print(inp, options, re.match(options, inp))
         while not re.match(options, inp):
             print(invalid_msg)
             inp = input(msg)

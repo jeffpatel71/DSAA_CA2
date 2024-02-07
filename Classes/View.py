@@ -1,6 +1,7 @@
 import turtle as turtle
 import math
 from Classes.Utilities.sort import Sort
+from Classes.PythonTreeViewer import ParseTreeVisualizer
 
 class View():
     def __init__(self):
@@ -13,7 +14,6 @@ class View():
             expression_string = str(hashtable[key].expression)
             expression_string = expression_string.replace(' ', '')
             print(f'{key}={expression_string}=>{hashtable[key].fast_eval}')
-
         print('')
 
     def display_evaluation(self, tree):
@@ -92,3 +92,7 @@ class View():
             else:
                 print(f"Variable {variable} has no dependencies")
             print('')
+
+    def traversal_python_tree(self, tree):
+        ParseTreeVisualizer().visualize_parse_tree_preorder(tree)
+        return

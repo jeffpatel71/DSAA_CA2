@@ -17,6 +17,8 @@ from Classes.Models.binaryHash import BinaryHashTable
 from Classes.Models.historyStack import historyStack
 from Classes.Models.search import Search
 
+
+from Classes.Models.randomex import random_expressions
 import re
 import copy
 import math
@@ -43,16 +45,18 @@ class Controller():
         hashtable_menu = HashTable()
         length = menu.load_menu()
         for i in range(length):
+            print(i)
             if i == 0 or i == length-1:
                 continue
             hashtable_menu[str(i)] = getattr(self, f'selection{i}')
-        
+
         
         # Display Menu and get user selection till user quits
         while True:
             menu.display_menu()
             regex = f"^[1-{length-1}]$"
             selection = self.__input.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
+            print(selection)
             if selection == str(length-1):
                 break
             hashtable_menu[selection]()
@@ -211,4 +215,26 @@ class Controller():
             Search().dfs(key, dependencies, visited, dependency_analysis)
         
         self.__view.display_visual_representation(dependency_analysis)
+        return
+    
+    def selection8(self):
+        # Purpose is to create a random variable to help the user understand the structure of the expression tree
+
+        # Random Variable Creation
+        var = self.__input.get_variable("Please enter the variable name you want to create: \n")
+        get_length = self.__input.get_number("Please enter the length of the expression: \n")
+
+        # Generate the random expression
+        expression = random_expressions().generate_random_expression(get_length)
+
+        # Display the expression and store it in the hashtable
+        print(f"Variable {var} has been created with the expression {expression}")
+        self.__storehashtable[var] = buildParseTree(expression, var)
+        self.__sortedKeys.add(var)     
+        return
+    
+    def selection9(self):
+        # Turtle Graphics, visualize the expression tree and show the user the different traversal methods
+        var = self.__input.get_variable("Please enter the variable you want to visualize: \n", keys = self.__sortedKeys)
+        self.__view.traversal_python_tree(self.__storehashtable[var])
         return
