@@ -2,8 +2,8 @@ Statements with Value ==> 240.0
 Durian=(Apple*Pear)
 
 Statements with Value ==> 135.5
-Mango=((Apple+(Durian+(Pear*(Blueberry*(Coconut/Strawberry)))))/2)
 Banana=(2*(65.5+2.25))
+Mango=((Apple+(Durian+(Pear*(Blueberry*(Coconut/Strawberry)))))/2)
 
 Statements with Value ==> 16.0
 Pear=(Apple+1)

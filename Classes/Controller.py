@@ -2,32 +2,30 @@
 # Import Statements
 from Classes.Menu import Menu
 from Classes.View import View
-# Models
+
+
+# Models/Data Structures
 from Classes.Models.Hash import HashTable
-from Classes.Models.Stack import Stack
+from Classes.binaryHash import BinaryHashTable
+from Classes.historyStack import historyStack
+
 
 # Utilities
 from Classes.Utilities.IO import text_input
-from Classes.Utilities.Class_Errors import Class_Errors
 from Classes.Utilities.files import File_Manager
 from Classes.Utilities.sort import Sort
 from Classes.Utilities.search import Search
 
-from Classes.evaluator import Evaluator
+# Binary Classes
 from Classes.buildParseTree import buildParseTree
 from Classes.MathTree import global_hash_table
-from Classes.binaryHash import BinaryHashTable
-from Classes.historyStack import historyStack
+
+from Classes.randomex import random_expressions
+# Python Libraries
 
 import re
 import copy
 import math
-# Alternative for importing all at once 
-
-"""
-import classes.models as Model
-import classes.utilities as Utilities
-"""
 
 class Controller():
     def __init__(self):
@@ -54,11 +52,14 @@ class Controller():
                 continue
             hashtable_menu[str(i)] = getattr(self, f'selection{i}')
         
-        
+        if length >=10:
+            regex = f"^[1-9]|{length-1}$"
+            print(regex)
+        else:
+            regex = f"^[1-{length-1}]$"
         # Display Menu and get user selection till user quits
         while True:
             menu.display_menu()
-            regex = f"^[1-{length-1}]$"
             selection = self.__input.check_input(regex, "Enter your selection: ", "Invalid input, please enter a valid selection")
             if selection == str(length-1):
                 break
@@ -69,7 +70,8 @@ class Controller():
         # Add/Modify Assignment Statements
         # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
         key, expression = self.__input.get_expression("Enter the assignment statement you want to add/modify: \n For example, a=(1+2)\n") # Check for double "="
-        
+        if key == None or expression == None:
+            return  
         self.__storehashtable[key] = buildParseTree(expression, key)
 
         evaluated_expression = self.__storehashtable[key].fast_eval
@@ -80,13 +82,10 @@ class Controller():
         else:
             pass
         self.__historyStackTable[key].push((expression, evaluated_expression))
-
-        print(evaluated_expression)
         return 
     
     def selection2(self):
         # Display Assignment Statements
-        print(f"Current Assignments:\n{'*' * 20}")
         self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return 
     
@@ -94,7 +93,8 @@ class Controller():
         # Evaluate Assignment Statements #Expression Tree
         var = self.__input.get_variable("Please enter the variable you want to evaluate: \n", keys = self.__sortedKeys)
         print("\n")
-        self.__view.display_evaluation(self.__storehashtable[var])
+        if var:
+            self.__view.display_evaluation(self.__storehashtable[var])
         return
     
     def selection4(self):
@@ -103,22 +103,27 @@ class Controller():
         file = File_Manager(folder_name="./", file_name=file_name)
         content = file.open_non_empty_file("Please enter the input file: \n")
 
-        # Check if the expression is valid regex for assigment statement can include operator, numbers and letters
+        # Read by Line
         for line in content.split("\n"):
-            # This is no checks done
+            if line == "":
+                continue
             key, expression = self.__input.get_expression(input=False,expression_string=line)
+            print(expression, key)
             if expression == None or key == None:
                 continue
+
             if key not in self.__sortedKeys:
                 self.__historyStackTable[key] = historyStack()
             else:
                 pass
 
             self.__storehashtable[key] = buildParseTree(expression, key)
-        
             self.__historyStackTable[key].push((expression, self.__storehashtable[key].fast_eval))
-
             self.__sortedKeys.add(key)
+
+        # Display Assignment Statements
+        
+        self.__view.display_assignments(self.__storehashtable, self.__sortedKeys)
         return
     
     def selection5(self):
@@ -131,7 +136,7 @@ class Controller():
                 eval.append([self.__storehashtable[i].fast_eval, i])
 
         sorted_eval = sorted(eval, key=lambda x: x[0], reverse=True)
-
+        
         # Group items with the same value
         grouped_eval = {}
         for value, key in eval:
@@ -164,7 +169,6 @@ class Controller():
     def selection6(self):
         # View assignment history
         inp = self.__input.yes_no()
-
         if inp == 'y':
             if len(self.__sortedKeys) == 0:
                 print('There are currently no assignments. Please add an assignment statement first.')
@@ -219,4 +223,26 @@ class Controller():
             Search().dfs(key, dependencies, visited, dependency_analysis)
         
         self.__view.display_visual_representation(dependency_analysis)
+        return
+    
+    def selection8(self):
+        # Purpose is to create a random variable to help the user understand the expression tree
+
+        # Random Variable Creation
+        var = self.__input.get_variable_new("Please enter the variable name you want to create: \n", keys=self.__sortedKeys)
+        get_length = self.__input.get_length("Please enter the length of the expression: (1-5)  \n")
+
+        # Generate the random expression
+        expression = random_expressions().generate_random_expression(length=get_length)
+
+        # Display the expression and store it in the hashtable
+        print(f"Variable {var} has been created with the expression {expression}")
+        self.__storehashtable[var] = buildParseTree(expression, var)
+        self.__sortedKeys.add(var)     
+        return
+    
+    def selection9(self):
+        # Turtle Graphics, visualize the expression tree
+        var = self.__input.get_variable("Please enter the variable you want to visualize: \n", keys = self.__sortedKeys)
+        self.__view.treeTraversal(self.__storehashtable[var])
         return

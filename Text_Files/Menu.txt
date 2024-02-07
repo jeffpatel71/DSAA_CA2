@@ -5,5 +5,7 @@ Please select your choice ('1', '2', '3', '4', '5', '6', '7', '8'):
     4. Read assignment statements from file
     5. Sort assignment statement
     6. View assignment history
-    7. Visualise Dependencies
-    8. Exit
+    7. Visualize dependencies
+    8. Generate Random Expression
+    9. Visualize Traversal
+    10. Exit

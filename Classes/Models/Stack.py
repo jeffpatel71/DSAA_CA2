@@ -35,7 +35,7 @@ class Stack:
         for i in range( len(self.__list) ): 
             item = self.__list[i] 
             if i < len(self.__list)-1   : 
-                output += f'\n{str(item)}, ' 
+                output += f'\n{str(item)}' 
             else: 
                 output += f'\n{str(item)}'  
         return output 

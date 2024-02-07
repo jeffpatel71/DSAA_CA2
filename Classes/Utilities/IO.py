@@ -21,7 +21,7 @@ class text_input:
         inp = input(f'{msg} Type Y for yes and N for no: ')
         while True:
             if str(inp).lower() in ['y', 'n']:
-                return inp
+                return str(inp).lower()
             else:
                 inp = input("Invalid input. Please enter Y for yes and N for no: ")
 
@@ -33,6 +33,9 @@ class text_input:
             )
             if variable in keys:
                 return variable
+            else:
+                print("Variable not found, please enter an existing variable\n")
+                return
 
     def get_expression(self, prompt="", input=True, expression_string="None"):
         while True:
@@ -47,16 +50,16 @@ class text_input:
                 if reject == False:
                      print("\nInvalid string:", expression_string, "skipping Line...\n")
                      return None, None
-
+                
             full_expression = full_expression.replace(" ", "")
-            
+
             # Check for two or more "="
             if full_expression.count("=") >= 2:
                 if input == False:
                     print(expression_string, "Skipping Line")
                     return None, None
                 print("Invalid input, please enter a valid assignment statement")
-                continue
+                return None, None
 
             # Check for "=" at the start or end
             if full_expression[0] == "=" or full_expression[-1] == "=":
@@ -64,7 +67,7 @@ class text_input:
                     print(expression_string, "Skipping Line")
                     return None, None
                 print("Invalid input, please enter a valid assignment statement")
-                continue
+                return
 
             # Check for opertors at the end or two operators in a row
             operators = ["+", "-", "*", "/"]
@@ -75,12 +78,19 @@ class text_input:
                         continue
                     if input == False:
                         print(expression_string, "Skipping Line")
-                        return None
+                        return None, None
                     print("Invalid input, please enter a valid assignment statement")
-                    continue
+                    return None, None
 
             key, expression = full_expression.split("=")
 
+            if re.match('\(\d+\)', expression):
+                if input == False:
+                    print(expression_string, "Skipping Line")
+                    return None, None
+                print("Invalid input, please enter a valid assignment statement")
+                return None, None
+            
             return key, expression
     
     def get_message(self, text):
@@ -96,4 +106,20 @@ class text_input:
             return file_path
         print()
         return file_path
-
+    
+    def get_variable_new(self, prompt, keys):
+        while True:
+            variable = self.check_input(
+                "^[a-zA-Z][a-zA-Z0-9]*$", prompt, "Invalid input, please enter a valid variable"
+            )
+            if variable not in keys:
+                return variable
+            else:
+                print("Variable already exists, please enter a new variable\n")
+                return
+            
+    def get_length(self, prompt):
+        length = self.check_input(
+            "^[1-5]$", prompt, "Invalid input, please enter a valid length"
+        )
+        return int(length)

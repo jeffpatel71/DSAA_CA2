@@ -1,16 +1,21 @@
 import turtle as turtle
 import math
-
+from Classes.Utilities.sort import Sort
+from Classes.PythonTreeViewer import ParseTreeVisualizer
+from Classes.Utilities.errors import TurtleGraphicsError
 class View():
     def __init__(self):
         return
     
     def display_assignments(self, hashtable, sorted_keys):
-        print('Assignments:')
+        print(f"Current Assignments:\n{'*' * 20}")
+        sorted_keys = Sort().quick_sort(set_of_items=sorted_keys)
         for key in sorted_keys:
             expression_string = str(hashtable[key].expression)
             expression_string = expression_string.replace(' ', '')
             print(f'{key}={expression_string}=>{hashtable[key].fast_eval}')
+
+        print('')
 
     def display_evaluation(self, tree):
         print("Expression Tree:")
@@ -88,3 +93,13 @@ class View():
             else:
                 print(f"Variable {variable} has no dependencies")
             print('')
+
+    def treeTraversal(self, tree):
+        visualizer = ParseTreeVisualizer()
+        try:
+            visualizer.visualize_parse_tree(tree)    
+        except turtle.Terminator as e:
+            print(e)
+    
+
+    
